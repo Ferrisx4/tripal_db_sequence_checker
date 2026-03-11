@@ -82,13 +82,35 @@ class SequenceChecker extends DrushCommands {
     // Loop through the table_details and find any tables whose sequences'
     // last_value is less than its max_value.
 
-    foreach ($table_details as $table) {
-      if ( isset($table->last_value) && isset($table->max_value) ) {
-        if ($table->last_value < $table->max_value) {
-          print $table_name . " is bad! OOh!\n";
+    $problem_tables = [];
+    foreach ($table_details as $key => $table) {
+      // echo "Last:\t" . $table['last_value'] . "\t\tMax:\t" . $table['max_value'] . "\n";
+      if ( isset($table['last_value']) && isset($table['max_value']) ) {
+        if ($table['last_value'] < $table['max_value']) {
+          // print_r($table);
+          $problem_tables[$key] = [
+            'table' => $key,
+            'column' => $table['sequence_column'],
+            'sequence' => $table['sequence_name'],
+            'last_value' => $table['last_value'],
+            '$max_value' => $table['max_value'],
+          ];
+          // print $key . " is bad! OOh!\n";
         }
       }
     }
+
+    // Report tables that are out-of-sync (with a nice table).
+    $headers = [
+      'Table',
+      'Column',
+      'Sequence',
+      'Last Value',
+      'Current Max',
+    ];
+
+    $this->io()->table($headers, $problem_tables);
+    
     // print_r($table_details);
   }
 }
