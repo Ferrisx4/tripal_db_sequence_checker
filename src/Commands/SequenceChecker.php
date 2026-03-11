@@ -71,7 +71,9 @@ class SequenceChecker extends DrushCommands {
       $max_query = "SELECT max(" . $sequence_column . ") FROM " . $schema . "." . $table;
       $max_value = $database->query($max_query)->fetchField();
 
-      $table_details[$schema . '.' . $table] = [
+      $table_details[] = [
+        'schema' => $schema,
+        'table' => $table,
         'sequence_column' => $sequence_column,
         'sequence_name' => $sequence_name,
         'last_value' => $last_value,
@@ -83,17 +85,18 @@ class SequenceChecker extends DrushCommands {
     // last_value is less than its max_value.
 
     $problem_tables = [];
-    foreach ($table_details as $key => $table) {
+    foreach ($table_details as $table) {
       // echo "Last:\t" . $table['last_value'] . "\t\tMax:\t" . $table['max_value'] . "\n";
       if ( isset($table['last_value']) && isset($table['max_value']) ) {
         if ($table['last_value'] < $table['max_value']) {
           // print_r($table);
-          $problem_tables[$key] = [
-            'table' => $key,
+          $problem_tables[] = [
+            'schema' => $table['schema'],
+            'table' => $table['table'],
             'column' => $table['sequence_column'],
             'sequence' => $table['sequence_name'],
             'last_value' => $table['last_value'],
-            '$max_value' => $table['max_value'],
+            'max_value' => $table['max_value'],
           ];
           // print $key . " is bad! OOh!\n";
         }
@@ -103,6 +106,7 @@ class SequenceChecker extends DrushCommands {
     // Report tables that are out-of-sync (with a nice table).
     $headers = [
       'Table',
+      'Schema',
       'Column',
       'Sequence',
       'Last Value',
@@ -110,7 +114,10 @@ class SequenceChecker extends DrushCommands {
     ];
 
     $this->io()->table($headers, $problem_tables);
-    
-    // print_r($table_details);
+
+    print "To fix these issues, you can run these commands in the database:\n";
+    foreach ($problem_tables as $table) {
+      echo "ALTER SEQUENCE " . $table['schema'] . "." . $table['sequence'] . " RESTART " . $table['max_value'] + 1 . ";\n";
+    }
   }
 }
