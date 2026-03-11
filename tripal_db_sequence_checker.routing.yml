@@ -1,0 +1,7 @@
+tripal_db_sequence_checker.settings_form:
+  path: '/admin/config/system/tripal-db-sequence-checker'
+  defaults:
+    _title: 'Tripal DB Sequence Checker settings'
+    _form: 'Drupal\tripal_db_sequence_checker\Form\TripalDbSequenceCheckerSettingsForm'
+  requirements:
+    _permission: 'administer tripal_db_sequence_checker'

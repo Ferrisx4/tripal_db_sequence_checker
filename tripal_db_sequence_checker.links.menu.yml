@@ -1,0 +1,6 @@
+tripal_db_sequence_checker.settings_form:
+  title: 'Tripal DB Sequence Checker'
+  description: 'Configure Tripal DB Sequence Checker.'
+  parent: 'tripal.extension'
+  route_name: 'tripal_db_sequence_checker.settings_form'
+  weight: 10

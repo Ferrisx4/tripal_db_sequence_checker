@@ -1,0 +1,9 @@
+name: Tripal DB Sequence Checker
+type: module
+description: Checks database sequences to ensure that they have not fallen behind.
+package: Tripal Extension
+core_version_requirement: ^10.4 | ^11.1
+dependencies:
+  - tripal:tripal
+  - tripal_chado:tripal_chado
+configure: tripal_db_sequence_checker.settings_form

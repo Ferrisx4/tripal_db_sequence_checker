@@ -1,0 +1,4 @@
+administer tripal_db_sequence_checker configuration:
+  title: 'Administer Tripal DB Sequence Checker'
+  description: 'Provides permission to configure Tripal DB Sequence Checker module settings.'
+  restrict access: TRUE

@@ -1,0 +1,5 @@
+services:
+  tripal_db_sequence_checker.sequencechecker:
+    class: '\Drupal\tripal_db_sequence_checker\Commands\SequenceChecker'
+    tags:
+      - { name: 'drush.command' }
